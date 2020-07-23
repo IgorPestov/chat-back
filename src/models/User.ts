@@ -26,6 +26,13 @@ const userShema: Schema = new Schema({
         type: Date,
         default: new Date(),
       },
+      friendList: {
+        type:Object,
+        friendId: {
+          type:String  
+       }
+      }
+        
 });
 
 const userModel = mongoose.model<IUser>("User", userShema);
