@@ -7,14 +7,13 @@ const mongoose = require("mongoose");
 const routes = require("./routes/routes");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const http = createServer(app);
-createSocket(http);
-
+const server = createServer(app);
+const io = require("socket.io")(server);
 require("dotenv").config();
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-
+//
+createSocket()
 mongoose
   .connect(process.env.MONGODB_URL, {
     useNewUrlParser: true,
@@ -29,10 +28,22 @@ mongoose
     console.log("Error with connecting to database");
   });
 
-app.get("/", (req: any, res: any) => {
-  res.sendFile(__dirname + "/index.html");
-});
-app.use("/", routes, createSocket);
-http.listen(PORT, () => {
+/////////////////////////////////////////
+// io.sockets.on("connect", (socket: any) => {
+//   socket.emit("connect", { message: "welcome to the chat" });
+//   socket.emit("msg", { message: "asdasdads" });
+//   socket.on("sendMsg", (data : any)=> {
+//     io.sockets.emit('addMsg', {msg: data})
+//   console.log("DATA", data);
+
+//   })
+// });
+// console.log("io",createSocket());
+
+//  io.on('msg', (socket:any)=>{
+//    console.log(socket)
+//  })
+app.use("/", routes );
+server.listen(PORT, () => {
   console.log(`Server : http://lockalhost:${PORT}`);
 });

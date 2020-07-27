@@ -14,7 +14,7 @@ const MessageSchema = new Schema(
     {
       timestamps: true,
       usePushEach: true,
-    }
+    } 
   );
   
   const MessageModel = mongoose.model<IMessage>("Message", MessageSchema);
