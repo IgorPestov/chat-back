@@ -1,2 +1,8 @@
 import express from "express";
-// import socket from "../core/socket"
+
+
+
+
+exports.createDialog = (req: any ,res : any) => {
+    const postData = { author: req.body. }
+}
