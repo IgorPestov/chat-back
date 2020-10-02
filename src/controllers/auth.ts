@@ -1,13 +1,14 @@
 import express from "express";
 import { IUser } from "../interface/IUser";
 import userModel from "../models/User";
+import jwt from 'jsonwebtoken'
 
 exports.signup = (req: express.Request, res: express.Response) => {
-  const { email, password, firstName } = req.body;
-  const postData: { email: string; password: string; firstName: string } = {
+  const { email, password, fullname } = req.body;
+  const postData: { email: string; password: string; fullname: string } = {
     email,
     password,
-    firstName,
+    fullname,
   };
   const user = new userModel(postData);
   user
@@ -23,13 +24,19 @@ exports.signup = (req: express.Request, res: express.Response) => {
       });
     });
 };
-exports.signin = async (req : express.Request , res:express.Response)  => {
-      const {email, password} = req.body
-      const user = await userModel.findOne({ email, password})
-      if(!user) {
-        res.status(400).json({
-          message: 'Invalide email or password'
-        })
-      }
-      res.send(user)
+exports.signin = async (req: express.Request, res: express.Response) => {
+  const { email, password } = req.body
+  let user: IUser | null;
+
+  user = await userModel.findOne({ email, password })
+  if (!user) {
+    res.status(400).json({
+      message: 'Invalide email or password'
+    })
+  }
+  const token = jwt.sign({
+    userId: user?._id,
+    fullname: user?.fullname,
+  }, '1231313')
+  res.send(token)
 }
